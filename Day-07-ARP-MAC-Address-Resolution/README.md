@@ -118,7 +118,7 @@ Therefore:
 
 ### Evidence
 
-![Wireshark ARP Analysis](./screenshots/01-wireshark-arp-analysis.png)
+👉 [View Wireshark ARP Analysis Screenshot](./screenshots/01-wireshark-arp-analysis.png)
 
 ---
 
