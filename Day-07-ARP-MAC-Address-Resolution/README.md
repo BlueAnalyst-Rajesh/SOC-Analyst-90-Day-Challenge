@@ -240,6 +240,146 @@ Because `8.8.8.8` is on a remote network, the host sends the frame to the gatewa
 
 ---
 
+## 🔗 Connect Everything You've Learned
+
+The concepts from Day 4 to Day 7 are connected during a real network investigation.
+
+### Day 4 → Private/Public IP
+
+First, identify whether an IP address belongs to the internal network or an external network.
+
+Example:
+
+```text
+10.240.36.237 → 40.126.17.131:443
+```
+
+```text
+10.240.36.237 = Private IP
+40.126.17.131 = Public IP
+```
+
+So the traffic is:
+
+```text
+Internal Host → External Host
+```
+
+---
+
+### Day 5 → Subnetting & CIDR
+
+Next, determine whether two IP addresses are in the same subnet.
+
+For example, with:
+
+```text
+IP Address: 10.240.36.237
+Subnet Mask: 255.255.255.0
+CIDR: /24
+```
+
+The network is:
+
+```text
+10.240.36.0/24
+```
+
+This helps determine whether the destination is **local or remote**.
+
+---
+
+### Day 6 → DHCP
+
+DHCP provides important network configuration to the host:
+
+```text
+IP Address      → 10.240.36.237
+Subnet Mask     → 255.255.255.0
+Default Gateway → 10.240.36.109
+DNS Server      → 10.240.36.109
+```
+
+We also observed the DHCP DORA process:
+
+```text
+Discover
+   ↓
+Offer
+   ↓
+Request
+   ↓
+ACK
+```
+
+---
+
+### Day 7 → ARP
+
+Once we know the network configuration, ARP helps resolve an IPv4 address to a MAC address on the local network.
+
+For the gateway:
+
+```text
+10.240.36.109
+        ↓
+1a:9f:91:47:06:2b
+```
+
+The ARP Request asks:
+
+```text
+"Who has 10.240.36.109?"
+```
+
+The ARP Reply provides the MAC address.
+
+---
+
+### 🧠 Putting It All Together
+
+```text
+DHCP
+↓
+Get IP Address + Subnet Mask + Gateway + DNS
+↓
+Subnetting / CIDR
+↓
+Determine Local or Remote Destination
+↓
+If Local → ARP resolves the destination MAC
+↓
+If Remote → ARP resolves the Gateway MAC
+↓
+Ethernet Frame carries the IP Packet
+↓
+Network Communication
+```
+
+### 🔎 SOC Investigation Connection
+
+These concepts help a SOC analyst understand network traffic step by step:
+
+```text
+IP Address
+↓
+Private or Public?
+↓
+Same Subnet or Different?
+↓
+Local Host or Gateway?
+↓
+ARP / MAC Resolution
+↓
+Protocol & Port
+↓
+Packet Evidence
+↓
+Normal or Requires Further Investigation?
+```
+
+This means the networking concepts learned from **Day 4 → Day 7** are not separate topics. They work together to help understand **who is communicating, where the communication is going, and how the communication happens at the network level**.
+
 # 🛡️ SOC Relevance
 
 ARP analysis can help investigate:
