@@ -399,22 +399,6 @@ Determine Risk
 
 ---
 
-## 📸 Evidence
-
-### DNS Query
-
-👉 [View DNS Query Analysis](./screenshots/01-dns-query-analysis.png)
-
-### DNS Response
-
-👉 [View DNS Response Analysis](./screenshots/02-dns-response-analysis.png)
-
-### DNS → TCP Connection
-
-👉 [View DNS-to-TCP Analysis](./screenshots/03-dns-to-tcp-analysis.png)
-
----
-
 ## 🛠️ Tools Used
 
 - Wireshark
