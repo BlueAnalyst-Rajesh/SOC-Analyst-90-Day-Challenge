@@ -1,6 +1,6 @@
-# Day 11 — Windows Security Logs & Network Investigation
+Day 11 — Windows Security Logs & Network Investigation
 
-## 🎯 Objective
+🎯 Objective
 
 Investigate Windows Security events and network traffic using PowerShell and Wireshark.
 
@@ -12,13 +12,13 @@ Goals:
 - Correlate DNS resolution with TCP and TLS metadata.
 - Practise evidence-based SOC alert triage.
 
-## 🧰 Tools Used
+🧰 Tools Used
 
 - Windows PowerShell — Query and filter Windows event logs.
 - Windows Event Viewer / Security Log — Inspect Windows security events.
 - Wireshark — Analyze DNS, TCP, and TLS traffic.
 
-## 🔗 Previous Knowledge Applied
+🔗 Previous Knowledge Applied
 
 This investigation builds on networking concepts covered in previous challenge days.
 
@@ -26,11 +26,11 @@ This investigation builds on networking concepts covered in previous challenge d
 - Wireshark Filters: Used the "dns" display filter.
 - DNS Investigation: Examined query types and returned IP addresses.
 - TCP Three-Way Handshake: Identified SYN, SYN/ACK, and ACK.
-- Evidence-Based Analysis: Avoided declaring an activity malicious or safe based on a single indicator.
+- Evidence-Based Analysis: Avoided declaring activity malicious or safe based on a single indicator.
 
 ---
 
-## 🔬 1. Windows Security Event Investigation
+🔬 1. Windows Security Event Investigation
 
 Event ID 4624 — Successful Logon
 
@@ -72,7 +72,7 @@ Analysis: This query did not return matching failed-logon events. It does not pr
 
 ---
 
-## 🔬 2. Security Event ID Summary
+🔬 2. Security Event ID Summary
 
 Command used:
 
@@ -91,7 +91,7 @@ Analysis: These counts represent only the 30 events retrieved by the command, no
 
 ---
 
-## 🔬 3. Windows Filtering Platform — Event ID 5156
+🔬 3. Windows Filtering Platform — Event ID 5156
 
 Examined permitted network connections and their application, IP addresses, ports, and protocols.
 
@@ -120,7 +120,7 @@ Analysis: Event ID 5156 records a permitted network connection. It does not, by 
 
 ---
 
-## 🔬 4. Wireshark — DNS Investigation
+🔬 4. Wireshark — DNS Investigation
 
 Display filter:
 
@@ -141,7 +141,7 @@ Analysis: DNS analysis identified the queried domain and its returned IPv4 addre
 
 ---
 
-## 🔬 5. DNS → TCP → TLS Correlation
+🔬 5. DNS → TCP → TLS Correlation
 
 Investigated the observed packet sequence associated with "fp.msedge.net".
 
@@ -163,11 +163,11 @@ What the Evidence Shows
 3. TLS: A TLS Client Hello containing the SNI "fp.msedge.net" was observed.
 4. Limitation: A subsequent Hello Retry Request was observed. The available evidence does not establish that the full TLS handshake or an application transaction completed successfully.
 
-Important correlation note: The WFP observation involving IPv6 UDP/443 and the Wireshark observation involving IPv4 TCP/443 are different flows. They must not be presented as the same connection. Matching a local IP address alone also does not prove that a particular process generated a specific packet.
+«Correlation note: The WFP observation involving IPv6 UDP/443 and the Wireshark observation involving IPv4 TCP/443 are different flows. They must not be presented as the same connection. Matching a local IP address alone also does not prove that a particular process generated a specific packet.»
 
 ---
 
-## 🚨 6. SOC Alert Triage Scenario
+🚨 6. SOC Alert Triage Scenario
 
 Scenario
 
@@ -175,21 +175,21 @@ A SOC alert reports that "chrome.exe" connected to an external IP on port "443".
 
 Investigation Approach
 
-Step 1 — Verify the process
+Step 1 — Verify the Process
 
 - Check the executable path.
 - Verify the digital signature.
 - Review the parent process and command-line arguments.
 - Look for unexpected process behavior.
 
-Step 2 — Validate network context
+Step 2 — Validate Network Context
 
 - Compare DNS results with the destination IP.
 - Review the destination, protocol, port, and connection timing.
 - Examine related endpoint and network alerts.
 - Investigate any unexpected or inconsistent evidence.
 
-Step 3 — Assess the evidence
+Step 3 — Assess the Evidence
 
 - An external IP or port 443 alone does not establish malicious activity.
 - A familiar domain or successful TCP handshake alone does not establish benign activity.
@@ -205,7 +205,7 @@ This is a scenario-based assessment, not a claim that every verification step wa
 
 ---
 
-## 🧠 7. Quick Revision
+🧠 7. Quick Revision
 
 Topic| Remember
 Event ID 4624| Successful logon
@@ -216,11 +216,11 @@ Event ID 5158| Local port bind permitted
 UDP/53| Commonly used for DNS
 TCP/443| Commonly used for HTTPS over TCP
 TCP handshake| SYN → SYN/ACK → ACK
-TLS Client Hello| TLS negotiation initiation; not proof of full handshake completion
-Event or connection permitted| Does not automatically mean safe
-No matching 4625 events returned| Does not prove failed logons never occurred
+TLS Client Hello| Starts TLS negotiation; does not prove full handshake completion
+Permitted connection| Does not automatically mean safe
+No matching 4625 events| Does not prove failed logons never occurred
 
-## 🎤 8. Interview Questions
+🎤 8. Interview Questions
 
 Q1. What is the difference between Event IDs 4624 and 4625?
 
@@ -240,18 +240,21 @@ Q4. Why should a SOC analyst correlate DNS, TCP, and TLS evidence?
 Correlation helps connect a domain lookup with subsequent network activity, provided the relevant timestamps, addresses, ports, protocols, and other evidence align.
 
 ---
-## 📸 Evidence
 
-1. [Windows 4624 — Successful Logon Analysis](./Screenshots/01-windows-4624-logon-analysis.png)
-2. [Windows 4625 — Failed Logon Query Result](./Screenshots/02-windows-4625-query-result.png)
-3. [Event 5156 — Network Analysis](./Screenshots/03-event-5156-network-analysis.png)
-4. [Wireshark — DNS Query Analysis](./Screenshots/04-wireshark-dns-query-analysis.png)
-5. [Wireshark — DNS Response Analysis](./Screenshots/05-wireshark-dns-response-analysis.png)
-6. [DNS → TCP → TLS Correlation](./Screenshots/06-dns-tcp-tls-correlation.png)
+📸 9. Evidence
+
+The following links point to the six screenshot files in the "Screenshots" folder.
+
+1. "Windows 4624 — Successful Logon Analysis" (./Screenshots/01-windows-4624-logon-analysis.png)
+2. "Windows 4625 — Failed Logon Query Result" (./Screenshots/02-windows-4625-query-result.png)
+3. "Event 5156 — Network Analysis" (./Screenshots/03-event-5156-network-analysis.png)
+4. "Wireshark — DNS Query Analysis" (./Screenshots/04-wireshark-dns-query-analysis.png)
+5. "Wireshark — DNS Response Analysis" (./Screenshots/05-wireshark-dns-response-analysis.png)
+6. "DNS → TCP → TLS Correlation" (./Screenshots/06-dns-tcp-tls-correlation.png)
 
 ---
 
-## ✅ 10. Key Learnings & Summary
+✅ 10. Key Learnings & Summary
 
 - Queried Windows Security events using PowerShell.
 - Interpreted successful and failed logon event queries.
