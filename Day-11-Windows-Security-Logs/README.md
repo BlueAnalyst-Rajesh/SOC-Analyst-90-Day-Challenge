@@ -46,6 +46,7 @@ Observed results:
 
 - The retrieved matching events were Event ID "4624".
 - Provider: "Microsoft-Windows-Security-Auditing".
+- The retrieved events were within the observed time range of 10 October 2026, approximately 22:34–23:03.
 - One examined event contained:
 
 Field| Observed value
@@ -54,7 +55,9 @@ Logon type| "5"
 Process| "C:\Windows\System32\services.exe"
 Source IP| "-"
 
-Analysis: Logon type 5 represents a service logon. The observed account and process are consistent with normal Windows service activity, but this event alone does not prove that the activity is safe.
+Analysis:
+
+Logon type "5" represents a service logon. The observed "SYSTEM" account and "services.exe" process are consistent with normal Windows service activity. However, this event alone does not prove that the activity is safe.
 
 Event ID 4625 — Failed Logon
 
@@ -66,9 +69,13 @@ Get-WinEvent -FilterHashtable @{
 } -MaxEvents 10 |
 Select-Object TimeCreated, Id, Message
 
-Observed result: No events matching the query were returned.
+Observed result:
 
-Analysis: This query did not return matching failed-logon events. It does not prove that failed logons have never occurred or rule out brute-force activity.
+No events were found that match the specified selection criteria.
+
+Analysis:
+
+This query did not return matching failed-logon events. It does not prove that failed logons have never occurred or rule out brute-force activity. The result applies only to the available log data and the query performed.
 
 ---
 
@@ -84,16 +91,20 @@ Select-Object Name, Count
 Observed results:
 
 Event ID| Count in retrieved 30 events| Meaning
-5158| 22| Windows Filtering Platform permitted a bind to a local port
-5156| 8| Windows Filtering Platform permitted a network connection
+"5158"| 22| Windows Filtering Platform permitted a bind to a local port
+"5156"| 8| Windows Filtering Platform permitted a network connection
 
-Analysis: These counts represent only the 30 events retrieved by the command, not the entire Security log. A permitted connection or port bind is not automatically malicious or automatically safe.
+Analysis:
+
+These counts represent only the 30 events retrieved by the command, not the entire Security log.
+
+A permitted network connection or local port bind does not automatically mean that the activity is malicious or safe. The application, endpoints, ports, protocol, timestamps, and surrounding evidence must also be considered.
 
 ---
 
 🔬 3. Windows Filtering Platform — Event ID 5156
 
-Examined permitted network connections and their application, IP addresses, ports, and protocols.
+Event ID "5156" indicates that Windows Filtering Platform permitted a network connection. The observed event details were used to examine application-associated network activity.
 
 Example A — UDP/443
 
@@ -103,20 +114,27 @@ Destination IPv6| "2404:6800:4000:1025::54"
 Destination port| "443"
 Protocol| "17" (UDP)
 
-Analysis: UDP/443 may be used by QUIC-based traffic. This event alone does not confirm QUIC or HTTP/3, nor does it establish whether the connection was benign.
+Analysis:
+
+UDP/443 may be used by QUIC-based traffic. However, this event alone does not confirm QUIC or HTTP/3, identify the exact application-layer service, or establish whether the connection was benign.
 
 Example B — DNS Traffic
 
 Field| Observed value
 Application| "chrome.exe"
 Source IP| "10.202.17.237"
+Source port| "62178"
 Destination DNS server| "10.202.17.55"
 Destination port| "53"
 Protocol| "17" (UDP)
 
 Additional DNS-related events showed traffic to the same DNS server using different source ports.
 
-Analysis: Event ID 5156 records a permitted network connection. It does not, by itself, reveal the DNS query name or prove that the connection was safe.
+Analysis:
+
+Event ID "5156" records a permitted network connection. It does not, by itself, reveal the DNS query name or prove that the connection was safe.
+
+The Windows event and Wireshark observations must be correlated using matching timestamps, addresses, ports, protocols, and other available evidence. A matching local IP address alone is insufficient to establish that two observations represent the same flow.
 
 ---
 
@@ -137,7 +155,13 @@ Query types| HTTPS, AAAA, A
 IPv4 address in the observed A response| "204.79.197.222"
 DNS response status| No error reported
 
-Analysis: DNS analysis identified the queried domain and its returned IPv4 address. A familiar domain or an error-free DNS response does not, by itself, prove that the resulting network activity is safe.
+Analysis:
+
+Wireshark was used to inspect DNS queries and responses for "fp.msedge.net".
+
+The observed responses included HTTPS, AAAA, and A record query types. The A response returned the IPv4 address "204.79.197.222" without a reported DNS error.
+
+A familiar domain or an error-free DNS response does not, by itself, prove that the resulting network activity is safe. DNS results should be evaluated alongside connection metadata and endpoint evidence.
 
 ---
 
@@ -155,6 +179,7 @@ TCP destination| "204.79.197.222:443"
 TCP handshake| SYN → SYN/ACK → ACK
 TLS metadata| TLS 1.3 Client Hello
 SNI| "fp.msedge.net"
+Subsequent TLS observation| Hello Retry Request
 
 What the Evidence Shows
 
@@ -164,6 +189,8 @@ What the Evidence Shows
 4. Limitation: A subsequent Hello Retry Request was observed. The available evidence does not establish that the full TLS handshake or an application transaction completed successfully.
 
 «Correlation note: The WFP observation involving IPv6 UDP/443 and the Wireshark observation involving IPv4 TCP/443 are different flows. They must not be presented as the same connection. Matching a local IP address alone also does not prove that a particular process generated a specific packet.»
+
+SOC takeaway: Correlation should be based on multiple matching attributes, not assumptions based on a domain name, IP address, or port alone.
 
 ---
 
@@ -193,6 +220,7 @@ Step 3 — Assess the Evidence
 
 - An external IP or port 443 alone does not establish malicious activity.
 - A familiar domain or successful TCP handshake alone does not establish benign activity.
+- A TLS Client Hello does not prove that the full TLS handshake completed.
 - Escalate if additional evidence indicates suspicious behavior.
 
 Final Assessment
@@ -208,17 +236,22 @@ This is a scenario-based assessment, not a claim that every verification step wa
 🧠 7. Quick Revision
 
 Topic| Remember
-Event ID 4624| Successful logon
-Event ID 4625| Failed logon
-Logon type 5| Service logon
-Event ID 5156| Network connection permitted
-Event ID 5158| Local port bind permitted
+Event ID "4624"| Successful logon
+Event ID "4625"| Failed logon
+Logon type "5"| Service logon
+Event ID "5156"| Network connection permitted
+Event ID "5158"| Local port bind permitted
 UDP/53| Commonly used for DNS
 TCP/443| Commonly used for HTTPS over TCP
+UDP/443| May carry QUIC-based traffic
 TCP handshake| SYN → SYN/ACK → ACK
 TLS Client Hello| Starts TLS negotiation; does not prove full handshake completion
 Permitted connection| Does not automatically mean safe
 No matching 4625 events| Does not prove failed logons never occurred
+DNS response without error| Does not establish that a destination is trustworthy
+Correlation| Requires matching evidence across relevant observations
+
+---
 
 🎤 8. Interview Questions
 
@@ -239,11 +272,22 @@ Q4. Why should a SOC analyst correlate DNS, TCP, and TLS evidence?
 
 Correlation helps connect a domain lookup with subsequent network activity, provided the relevant timestamps, addresses, ports, protocols, and other evidence align.
 
+Q5. Does an empty Event ID 4625 query prove there were no failed logons?
+
+No. It means the query returned no matching events from the available log data. It does not prove that failed logons never occurred or that logging was complete.
+
+Q6. What is the difference between Event IDs 5156 and 5158?
+
+- "5156": Windows Filtering Platform permitted a network connection.
+- "5158": Windows Filtering Platform permitted a bind to a local port.
+
+Both events require context before an analyst can determine whether the associated activity is suspicious.
+
 ---
 
 📸 9. Evidence
 
-The following links point to the six screenshot files in the "Screenshots" folder.
+The following links reference the six screenshot files in the "Screenshots" folder. Click a link to open the corresponding evidence image in the GitHub repository.
 
 1. "Windows 4624 — Successful Logon Analysis" (./Screenshots/01-windows-4624-logon-analysis.png)
 2. "Windows 4625 — Failed Logon Query Result" (./Screenshots/02-windows-4625-query-result.png)
@@ -252,15 +296,18 @@ The following links point to the six screenshot files in the "Screenshots" folde
 5. "Wireshark — DNS Response Analysis" (./Screenshots/05-wireshark-dns-response-analysis.png)
 6. "DNS → TCP → TLS Correlation" (./Screenshots/06-dns-tcp-tls-correlation.png)
 
+Evidence note: These links assume the filenames and folder capitalization match the repository. Keep each screenshot aligned with the observation described in this README. Do not use a screenshot as proof of a finding it does not show.
+
 ---
 
 ✅ 10. Key Learnings & Summary
 
 - Queried Windows Security events using PowerShell.
-- Interpreted successful and failed logon event queries.
+- Interpreted successful and failed logon event queries without overclaiming.
 - Examined WFP events for permitted network connections and local port binds.
 - Investigated DNS query types and responses in Wireshark.
-- Correlated DNS resolution with TCP handshake and TLS Client Hello metadata.
-- Practised SOC alert triage using evidence and explicit investigation limitations.
+- Identified the observed DNS answer and the subsequent TCP handshake and TLS Client Hello metadata.
+- Recognized the difference between separate network flows.
+- Practised SOC alert triage using evidence, correlation, and explicit investigation limitations.
 
 SOC Principle: Investigate the process, network context, and related evidence before deciding whether an alert is benign, suspicious, or malicious.
