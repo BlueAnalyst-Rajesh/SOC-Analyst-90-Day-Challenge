@@ -187,12 +187,12 @@ Closure should follow the organization's investigation and alert-closure criteri
 
 ## 📸 Evidence
 
-1. "Windows 4624 — Successful Logon Analysis" (./Screenshots/01-windows-4624-logon-analysis.png)
-2. "Windows 4625 — Failed Logon Query Result" (./Screenshots/02-windows-4625-query-result.png)
-3. "Windows Filtering Platform — Event ID 5156 Network Analysis" (./Screenshots/03-event-5156-network-analysis.png)
-4. "Wireshark — DNS Query Analysis" (./Screenshots/04-wireshark-dns-query-analysis.png)
-5. "Wireshark — DNS Response Analysis" (./Screenshots/05-wireshark-dns-response-analysis.png)
-6. "DNS → TCP Handshake → TLS Client Hello / SNI Correlation" (./Screenshots/06-dns-tcp-tls-correlation.png)
+1. [Windows 4624 — Successful Logon Analysis](./Screenshots/01-windows-4624-logon-analysis.png)
+2. [Windows 4625 — Failed Logon Query Result](./Screenshots/02-windows-4625-query-result.png)
+3. [Event 5156 — Network Analysis](./Screenshots/03-event-5156-network-analysis.png)
+4. [Wireshark — DNS Query Analysis](./Screenshots/04-wireshark-dns-query-analysis.png)
+5. [Wireshark — DNS Response Analysis](./Screenshots/05-wireshark-dns-response-analysis.png)
+6. [DNS → TCP → TLS Correlation](./Screenshots/06-dns-tcp-tls-correlation.png)
 
 Replace these suggested paths with your actual screenshot filenames. Remove any link for which you do not have matching evidence.
 
