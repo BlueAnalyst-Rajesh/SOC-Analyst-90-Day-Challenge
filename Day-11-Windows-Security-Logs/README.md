@@ -240,17 +240,14 @@ Q4. Why should a SOC analyst correlate DNS, TCP, and TLS evidence?
 Correlation helps connect a domain lookup with subsequent network activity, provided the relevant timestamps, addresses, ports, protocols, and other evidence align.
 
 ---
+## 📸 Evidence
 
-## 📸 9. Evidence
-
-The following links use the "Screenshots" folder and filenames visible in the GitHub repository.
-
-1. "Windows 4624 — Successful Logon Analysis" (./Screenshots/01-windows-4624-logon-analysis.png)
-2. "Windows 4625 — Failed Logon Query Result" (./Screenshots/02-windows-4625-query-result.png)
-3. "Event 5156 — Network Analysis" (./Screenshots/03-event-5156-network-analysis.png)
-4. "Wireshark — DNS Query Analysis" (./Screenshots/04-wireshark-dns-query-analysis.png)
-5. "Wireshark — DNS Response Analysis" (./Screenshots/05-wireshark-dns-response-analysis.png)
-6. "DNS → TCP → TLS Correlation" (./Screenshots/06-dns-tcp-tls-correlation.png)
+1. [Windows 4624 — Successful Logon Analysis](./Screenshots/01-windows-4624-logon-analysis.png)
+2. [Windows 4625 — Failed Logon Query Result](./Screenshots/02-windows-4625-query-result.png)
+3. [Event 5156 — Network Analysis](./Screenshots/03-event-5156-network-analysis.png)
+4. [Wireshark — DNS Query Analysis](./Screenshots/04-wireshark-dns-query-analysis.png)
+5. [Wireshark — DNS Response Analysis](./Screenshots/05-wireshark-dns-response-analysis.png)
+6. [DNS → TCP → TLS Correlation](./Screenshots/06-dns-tcp-tls-correlation.png)
 
 ---
 
