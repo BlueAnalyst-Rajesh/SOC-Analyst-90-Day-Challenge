@@ -145,7 +145,7 @@ Frames "10–12" contained DNS responses. Frame "12" contained the A-record resp
 Practical 6 — Trace the Network Activity
 
 Observed sequence:
-
+```text
 Domain: fp.msedge.net
           |
           v
@@ -162,6 +162,7 @@ TLS 1.3 Client Hello
           |
           v
 SNI: fp.msedge.net
+```
 
 Connection details:
 
