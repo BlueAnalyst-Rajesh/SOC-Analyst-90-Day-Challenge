@@ -15,6 +15,7 @@ Important Event IDs
 | 4625 | Failed logon |
 | 5156 | Network connection permitted |
 | 5158 | Local port bind permitted |
+
 Practical 1 — Find Successful and Failed Logons
 Command:
 ```
