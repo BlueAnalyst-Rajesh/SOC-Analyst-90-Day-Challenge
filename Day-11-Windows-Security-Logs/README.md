@@ -69,6 +69,7 @@ Observed network details:
 | Destination IPv6 | 2404:6800:4000:1025::54 |
 | Destination Port | 443 |
 | Protocol | UDP (17) |
+
 A separate DNS-related observation showed:
  * Application: chrome.exe
  * Client IP: 10.202.17.237
