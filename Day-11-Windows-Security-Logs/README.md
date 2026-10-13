@@ -59,13 +59,13 @@ Observed result: No events matched the query.
 Analysis: No matching Event ID "4625" events were returned by this query. This does not prove that failed logons have never occurred or rule out brute-force activity outside the available logs or time range.
 
 Logon Types — Quick Reference
-|---|---|
+```
 Logon Type| Meaning
 "2"| Interactive logon
 "3"| Network logon
 "5"| Service logon
 "10"| Remote Interactive logon, commonly RDP
-|---|---|
+```
 ---
 
 ## 2. Security Event Summary & Network Analysis
