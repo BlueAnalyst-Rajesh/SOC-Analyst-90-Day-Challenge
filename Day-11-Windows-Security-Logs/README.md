@@ -26,12 +26,13 @@ Event ID| Meaning
 Practical 1 — Find Successful and Failed Logons
 
 Command:
-
+```
 Get-WinEvent -FilterHashtable @{
     LogName = 'Security'
     Id = 4624, 4625
 } -MaxEvents 10 |
 Select-Object TimeCreated, Id, ProviderName, Message
+```
 
 Observed result:
 
