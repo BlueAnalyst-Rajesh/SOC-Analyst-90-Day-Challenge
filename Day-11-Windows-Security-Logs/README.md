@@ -13,6 +13,18 @@ Investigate Windows logon events and network activity using PowerShell and Wires
 
 ---
 
+## 🔗 Previous Knowledge Applied
+
+This investigation builds on networking and packet-analysis concepts learned in previous SOC challenge days.
+
+- TCP/IP and Ports: Used knowledge of TCP/443, UDP/53, and network endpoints to interpret connection details.
+- Wireshark Display Filters: Applied the "dns" filter to inspect DNS queries and responses.
+- DNS Investigation: Connected DNS query types and returned IP addresses with subsequent network observations.
+- TCP Three-Way Handshake: Identified SYN, SYN/ACK, and ACK packets to verify TCP connection establishment.
+- Evidence-Based Analysis: Applied the principle that a single event, IP address, port, or domain is insufficient to confirm malicious activity.
+
+These concepts helped connect Windows event-log investigation with packet-level network analysis while keeping conclusions limited to the available evidence.
+
 ## 1. Windows Security Log Analysis
 
 Important Event IDs
